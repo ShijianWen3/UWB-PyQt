@@ -256,7 +256,7 @@ class GraphicsView(QGraphicsView):
         )
         
         scale = max(1.0, min(visibleRect.height() * sy, 1500.0))
-        self.scaleChanged.emit(scale)
+        self.scaleChanged.emit(round(scale,2))
         self.setVisibleRect(visibleRect)
     
     def setVisibleRect(self, visibleRect):
@@ -380,7 +380,7 @@ class GraphicsView(QGraphicsView):
                     self.firstMove = False
                 
                 self.update()
-                self.rotateChanged.emit(self.rotateAngle)
+                self.rotateChanged.emit(round(self.rotateAngle, 2))
     
     def mouseReleaseEvent(self, event):
         """鼠标释放事件"""

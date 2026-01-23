@@ -288,53 +288,25 @@ class GraphicsWidget(QWidget):
     
     def _init_qml_components(self):
         """初始化QML组件"""
-        try:
-            # 创建QQuickWidget并设置为顶层widget
-            self.m_QQuickWidget = QQuickWidget(self)
-            
-            # 在加载QML前设置上下文属性
-            self.m_QQuickWidget.rootContext().setContextProperty("canvas_posX", self.canvas_posX)
-            self.m_QQuickWidget.rootContext().setContextProperty("canvas_posY", self.canvas_posY)
-            self.m_QQuickWidget.rootContext().setContextProperty("canvas_rotate", self.canvas_rotate)
-            self.m_QQuickWidget.rootContext().setContextProperty("canvas_scale", self.canvas_scale)
-            self.m_QQuickWidget.rootContext().setContextProperty("language", self.language)
-            self.m_QQuickWidget.rootContext().setContextProperty("canvasInfomationVisible", self.canvasInfomationVisible)
-            self.m_QQuickWidget.rootContext().setContextProperty("calibrationIndex", self.calibrationIndex)
-            self.m_QQuickWidget.rootContext().setContextProperty("calibrationTextVisible", self.calibrationTextVisible)
-            
-            # 设置透明背景
-            self.m_QQuickWidget.setClearColor(QColor(Qt.transparent))
-            
-            # 加载QML文件
-            qml_url = QUrl("qrc:/qml/CanvasInformation.qml")
-            self.m_QQuickWidget.setSource(qml_url)
-            
-            # 检查加载错误
-            if self.m_QQuickWidget.status() != QQuickWidget.Ready:
-                print(f"QML加载失败: {self.m_QQuickWidget.errors()}")
-            
-            # 设置合理的大小和位置
-            self.m_QQuickWidget.resize(280, 220)
-            self.m_QQuickWidget.move(10, 10)
-            
-            # 设置堆叠顺序 - 使用raise()方法而不是属性
-            self.m_QQuickWidget.raise_()
-            self.m_QQuickWidget.show()
-            
-            # 连接QML信号
-            m_item = self.m_QQuickWidget.rootObject()
-            if m_item:
-                try:
-                    m_item.resetSignal.connect(self.resetButtonClicked)
-                    print("QML信号连接成功")
-                except Exception as e:
-                    print(f"QML信号连接失败: {e}")
-            else:
-                print("无法获取QML根对象")
-                
-        except Exception as e:
-            print(f"QML组件初始化失败: {e}")
+        self.m_QQuickWidget = QQuickWidget(self.ui.graphicsView)
+        self.m_QQuickWidget.rootContext().setContextProperty("canvas_posX", self.canvas_posX)
+        self.m_QQuickWidget.rootContext().setContextProperty("canvas_posY", self.canvas_posY)
+        self.m_QQuickWidget.rootContext().setContextProperty("canvas_rotate", self.canvas_rotate)
+        self.m_QQuickWidget.rootContext().setContextProperty("canvas_scale", self.canvas_scale)
+        self.m_QQuickWidget.rootContext().setContextProperty("language", self.language)
+        self.m_QQuickWidget.rootContext().setContextProperty("canvasInfomationVisible", self.canvasInfomationVisible)
+        
+        # 注意：需要确保QML文件路径正确
+        self.m_QQuickWidget.setSource(QUrl("qrc:/qml/CanvasInformation.qml"))
+        self.m_QQuickWidget.move(10, 360)
+        self.m_QQuickWidget.setAttribute(Qt.WA_AlwaysStackOnTop)
+        self.m_QQuickWidget.setClearColor(QColor(Qt.transparent))
 
+        
+        # 连接QML信号
+        m_item = self.m_QQuickWidget.rootObject()
+        if m_item:
+            m_item.resetSignal.connect(self.resetButtonClicked)
     
     def _connect_signals(self):
         """连接信号"""
@@ -351,10 +323,10 @@ class GraphicsWidget(QWidget):
         self.centerRect.connect(self.graphicsView().centerRect)
         
         # 视图设置信号
-        # self.graphicsView().sizeChanged.connect(self.sizeChanged)
-        # self.graphicsView().rotateChanged.connect(self.rotateChanged)
-        # self.graphicsView().visibleRectChanged.connect(self.visibleRectChanged)
-        # self.graphicsView().scaleChanged.connect(self.scaleChanged)
+        self.graphicsView().sizeChanged.connect(self.sizeChanged)
+        self.graphicsView().rotateChanged.connect(self.rotateChanged)
+        self.graphicsView().visibleRectChanged.connect(self.visibleRectChanged)
+        self.graphicsView().scaleChanged.connect(self.scaleChanged)
         
         # 其他信号连接
         # 注意：这些需要在应用程序ready后连接
@@ -922,7 +894,7 @@ class GraphicsWidget(QWidget):
         """旋转改变"""
         self.canvas_rotate = rotate
         if self.m_QQuickWidget:
-            self.m_QQuickWidget.rootContext().setContextProperty("canvas_rotate", rotate)
+            self.m_QQuickWidget.rootContext().setContextProperty("canvas_rotate", round(rotate,2))
     
     def visibleRectChanged(self):
         """可见矩形改变"""
@@ -933,26 +905,13 @@ class GraphicsWidget(QWidget):
         """重置按钮点击"""
         if self.graphicsView():
             self.graphicsView().resetRotate()
+
     
     def scaleChanged(self, scale):
         """缩放改变"""
-        self.canvas_scale = str(scale)
+        self.canvas_scale = str(round(scale, 2))
         if self.m_QQuickWidget:
-            self.m_QQuickWidget.rootContext().setContextProperty("canvas_scale", str(scale))
-    
-    def updateCanvasPosition(self, posX, posY):
-        """更新画布位置"""
-        self.canvas_posX = str(posX)
-        self.canvas_posY = str(posY)
-        if self.m_QQuickWidget:
-            self.m_QQuickWidget.rootContext().setContextProperty("canvas_posX", self.canvas_posX)
-            self.m_QQuickWidget.rootContext().setContextProperty("canvas_posY", self.canvas_posY)
-    
-    def setCanvasVisible(self, visible):
-        """设置画布可见"""
-        self.canvasInfomationVisible = visible
-        if self.m_QQuickWidget:
-            self.m_QQuickWidget.rootContext().setContextProperty("canvasInfomationVisible", visible)
+            self.m_QQuickWidget.rootContext().setContextProperty("canvas_scale", self.canvas_scale)
     
     def setCanvasFontSize(self, size):
         """设置画布字体大小"""

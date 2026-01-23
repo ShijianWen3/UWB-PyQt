@@ -452,7 +452,7 @@ class GraphicsView(QGraphicsView):
     def drawOrigin(self, painter):
         """绘制原点"""
         p = QPointF(0, 0)
-        painter.setPen(QPen(QBrush(Qt.red), 0))
+        painter.setPen(QPen(QBrush(Qt.blue), 0))
         painter.drawEllipse(p, 0.05, 0.05)
     
     def drawGrid(self, painter, rect):
