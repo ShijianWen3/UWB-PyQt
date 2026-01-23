@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="/">
+    <file>icons/angle.png</file>
+    <file>icons/position.png</file>
+    <file>icons/reset.png</file>
+    <file>icons/scale.png</file>
+    <file>icons/UWB.png</file>
+    <file>qml/CanvasInformation.qml</file>
+  </qresource>
+</RCC>
