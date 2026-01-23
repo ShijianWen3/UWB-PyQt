@@ -116,8 +116,8 @@ class MainWindow(QMainWindow):
         left_layout.addWidget(self.left_tabs)
         
         # 添加连接控制组件
-        self._connection_widget = ConnectionWidget()
-        self.left_tabs.addTab(self._connection_widget, "连接控制")
+        # self._connection_widget = ConnectionWidget()
+        # self.left_tabs.addTab(self._connection_widget, "连接控制")
         
         # 添加视图设置组件
         self._view_settings_widget = ViewSettingsWidget()

@@ -327,6 +327,7 @@ class GraphicsWidget(QWidget):
         self.graphicsView().rotateChanged.connect(self.rotateChanged)
         self.graphicsView().visibleRectChanged.connect(self.visibleRectChanged)
         self.graphicsView().scaleChanged.connect(self.scaleChanged)
+        self.graphicsView().originPositionChanged.connect(self.onOriginPositionChanged)
         
         # 其他信号连接
         # 注意：这些需要在应用程序ready后连接
@@ -902,9 +903,17 @@ class GraphicsWidget(QWidget):
         pass
     
     def resetButtonClicked(self):
-        """重置按钮点击"""
+        """重置按钮点击 - 重置角度和位置"""
         if self.graphicsView():
+            # 重置旋转角度
             self.graphicsView().resetRotate()
+            # 重置视图位置到初始状态
+            self.graphicsView().resetView()
+
+            #重置qml显示内容
+            self.graphicsView().scaleChanged.emit(1.0)
+            self.graphicsView().originPositionChanged.emit(0.0, 0.0)
+            self.graphicsView().rotateChanged.emit(0.0)
 
     
     def scaleChanged(self, scale):
@@ -912,6 +921,17 @@ class GraphicsWidget(QWidget):
         self.canvas_scale = str(round(scale, 2))
         if self.m_QQuickWidget:
             self.m_QQuickWidget.rootContext().setContextProperty("canvas_scale", self.canvas_scale)
+    
+    def onOriginPositionChanged(self, x, y):
+        """
+        Origin点位置改变时调用
+        x, y 为Origin点相对于graphicsView窗口的像素坐标
+        """
+        self.canvas_posX = str(round(x, 2))
+        self.canvas_posY = str(round(y, 2))
+        if self.m_QQuickWidget:
+            self.m_QQuickWidget.rootContext().setContextProperty("canvas_posX", self.canvas_posX)
+            self.m_QQuickWidget.rootContext().setContextProperty("canvas_posY", self.canvas_posY)
     
     def setCanvasFontSize(self, size):
         """设置画布字体大小"""

@@ -177,6 +177,7 @@ class GraphicsView(QGraphicsView):
     sizeChanged = pyqtSignal(object)  # QSize
     rotateChanged = pyqtSignal(float)
     scaleChanged = pyqtSignal(float)
+    originPositionChanged = pyqtSignal(float, float)  # x, y - Origin点的场景坐标
     
     # 鼠标上下文枚举
     DefaultMouseContext = 0
@@ -207,6 +208,10 @@ class GraphicsView(QGraphicsView):
         self.mouseAngle = 0.0
         self.firstMove = True
         
+        # Origin点位置追踪
+        self._originPos = QPointF(0.0, 0.0)  # Origin点在场景坐标系中的位置
+        self._initialVisibleRect = QRectF(-1, -1, 6, 6)  # 保存初始的可见矩形
+        
         # 视图设置
         self._viewSettings = ViewSettings()  # 创建默认视图设置
         
@@ -218,6 +223,9 @@ class GraphicsView(QGraphicsView):
         
         self.setVisibleRect(QRectF(-1, -1, 6, 6))
         self.setSceneRect(-1500, -1500, 3000, 3000)
+        
+        # 保存初始可见矩形
+        self._initialVisibleRect = QRectF(self._visibleRect)
         
         # 安装事件过滤器
         self.viewport().installEventFilter(self)
@@ -289,6 +297,27 @@ class GraphicsView(QGraphicsView):
         p = QPointF(x, y)
         visibleRect.moveCenter(p)
         self.setVisibleRect(visibleRect)
+    
+    def getOriginScreenPosition(self):
+        """
+        获取Origin点(0,0)相对于graphicsView窗口的屏幕位置
+        返回值为相对于graphicsView坐标系的像素位置
+        """
+        # Origin点在场景坐标系中的位置是 (0, 0)
+        originScenePos = QPointF(0.0, 0.0)
+        
+        # 使用mapFromScene将场景坐标转换为视口坐标（窗口坐标）
+        originViewportPos = self.mapFromScene(originScenePos)
+        
+        # 相对于graphicsView窗口的位置
+        return originViewportPos
+    
+    def resetView(self):
+        """
+        重置视图到初始状态
+        包括恢复初始的可见矩形（位置和缩放）
+        """
+        self.setVisibleRect(self._initialVisibleRect)
     
     def mousePressEvent(self, event):
         """鼠标按下事件"""
@@ -381,6 +410,10 @@ class GraphicsView(QGraphicsView):
                 
                 self.update()
                 self.rotateChanged.emit(self.rotateAngle)
+        
+        # 发送Origin点位置信号
+        originPos = self.getOriginScreenPosition()
+        self.originPositionChanged.emit(originPos.x(), originPos.y())
     
     def mouseReleaseEvent(self, event):
         """鼠标释放事件"""
@@ -466,7 +499,7 @@ class GraphicsView(QGraphicsView):
         left = width * math.ceil(adjusted.left() / width)
         top = height * math.ceil(adjusted.top() / height)
         
-        painter.setPen(QPen(QBrush(Qt.lightGray), 0))
+        painter.setPen(QPen(QBrush(Qt.red), 0))
         
         if width > 0 and height > 0:
             x = left
