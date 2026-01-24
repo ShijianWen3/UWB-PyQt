@@ -161,7 +161,7 @@ class MainWindow(QMainWindow):
         status_dock = QDockWidget("系统状态", self)
         status_dock.setObjectName("StatusDock")
         status_dock.setAllowedAreas(Qt.BottomDockWidgetArea)
-        status_dock.setMaximumHeight(120)
+        status_dock.setMaximumHeight(100)
         status_dock.setFloating(False)
         status_dock.setFeatures(status_dock.features() & ~QDockWidget.DockWidgetFloatable)
         
@@ -169,10 +169,10 @@ class MainWindow(QMainWindow):
         status_widget = QWidget()
         status_layout = QVBoxLayout(status_widget)
         
-        # 添加状态标签
-        self.status_label = QLabel("系统就绪")
-        self.status_label.setAlignment(Qt.AlignCenter)
-        status_layout.addWidget(self.status_label)
+        # # 添加状态标签
+        # self.status_label = QLabel("系统就绪")
+        # self.status_label.setAlignment(Qt.AlignCenter)
+        # status_layout.addWidget(self.status_label)
         
         # 添加连接状态
         self.connection_status_label = QLabel("连接状态: 未连接")
@@ -196,7 +196,7 @@ class MainWindow(QMainWindow):
         from PyQt5.QtWidgets import QTextEdit
         self.log_text_edit = QTextEdit()
         self.log_text_edit.setReadOnly(True)
-        self.log_text_edit.setMaximumHeight(150)
+        self.log_text_edit.setMaximumHeight(100)
         log_layout.addWidget(self.log_text_edit)
         
         log_dock.setWidget(log_widget)
