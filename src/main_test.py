@@ -77,19 +77,25 @@ class RTLDisplayApplication:
         self.app = QApplication(sys.argv)
         
         # 设置应用程序信息
-        self.app.setApplicationName("RTL Display Application")
-        self.app.setApplicationDisplayName("RTL Display")
+        self.app.setApplicationName("UWB")
+        self.app.setApplicationDisplayName("UWB-RTL Display")
         self.app.setApplicationVersion("1.0.0")
-        self.app.setOrganizationName("RTL Display Team")
-        self.app.setOrganizationDomain("rtl-display.com")
+        self.app.setOrganizationName("UWB-RTL Display Team")
+        self.app.setOrganizationDomain("uwb-rtl-display.com")
         
     def _create_main_window(self):
         """创建主窗口"""
         self.main_window = create_main_window()
         
-        # 设置窗口图标
-        icon = self._create_application_icon()
-        self.main_window.setWindowIcon(icon)
+        # 设置窗口图标- 代码绘制
+        # icon = self._create_application_icon()
+        # self.main_window.setWindowIcon(icon)
+
+        # 设置窗口图标- 图片文件
+        self.main_window.setWindowIcon(QIcon(":/icons/UWB.png"))
+
+
+
         
     def _create_application_icon(self):
         """创建应用程序图标"""

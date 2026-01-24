@@ -294,7 +294,7 @@ class GraphicsWidget(QWidget):
         
         # 注意：需要确保QML文件路径正确
         # self.m_QQuickWidget.setSource(QUrl("qrc:/icons/CanvasInformation.qml"))
-        self.m_QQuickWidget.move(10, 900)
+        self.m_QQuickWidget.move(10, 1200)
         self.m_QQuickWidget.setAttribute(Qt.WA_AlwaysStackOnTop)
         self.m_QQuickWidget.setClearColor(QColor(Qt.transparent))
         

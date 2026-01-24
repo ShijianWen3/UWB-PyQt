@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                            QHBoxLayout, QSplitter, QDockWidget, QAction, 
                            QMenuBar, QToolBar, QStatusBar, QMessageBox, 
                            QFileDialog, QTabWidget, QFrame, QLabel)
-from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QThread
+from PyQt5.QtCore import Qt, QTimer, pyqtSignal, QThread, QUrl
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 
 # 导入各个组件
@@ -43,8 +43,12 @@ class MainWindow(QMainWindow):
         self._geometry_saved = False
         
         # 设置窗口属性
-        self.setWindowTitle("RTL Display Application - PyQt5")
-        self.setWindowIcon(self._create_app_icon())
+        self.setWindowTitle("UWB-RTL Display Application")
+
+        #使用代码绘制的icon
+        # self.setWindowIcon(self._create_app_icon())
+        #使用图片
+        self.setWindowIcon(QIcon(":/icons/UWB.png"))
         
         # 初始化UI
         self._init_ui()
