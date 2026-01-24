@@ -162,7 +162,10 @@ class MainWindow(QMainWindow):
         # 创建停靠窗口
         status_dock = QDockWidget("系统状态", self)
         status_dock.setObjectName("StatusDock")
-        status_dock.setAllowedAreas(Qt.BottomDockWidgetArea | Qt.TopDockWidgetArea)
+        status_dock.setAllowedAreas(Qt.BottomDockWidgetArea)
+        status_dock.setMaximumHeight(120)
+        status_dock.setFloating(False)
+        status_dock.setFeatures(status_dock.features() & ~QDockWidget.DockWidgetFloatable)
         
         # 创建状态显示部件
         status_widget = QWidget()
@@ -362,7 +365,7 @@ class MainWindow(QMainWindow):
     def _setup_window_geometry(self):
         """设置窗口几何属性"""
         # 设置初始大小
-        self.resize(1200, 800)
+        self.resize(1200, 920)
         
         # 居中显示
         from PyQt5.QtWidgets import QDesktopWidget
