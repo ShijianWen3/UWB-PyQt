@@ -73,8 +73,6 @@ class MainWindow(QMainWindow):
         # 创建菜单栏
         self._create_menu_bar()
         
-        # 创建工具栏
-        self._create_tool_bar()
         
         # 创建状态栏
         self._create_status_bar()
@@ -333,6 +331,7 @@ class MainWindow(QMainWindow):
         # 添加校准按钮
         calibrate_btn = toolbar.addAction('校准')
         calibrate_btn.triggered.connect(self._on_calibrate)
+
         
     def _create_status_bar(self):
         """创建状态栏"""
@@ -364,15 +363,8 @@ class MainWindow(QMainWindow):
         
     def _setup_window_geometry(self):
         """设置窗口几何属性"""
-        # 设置初始大小
-        self.resize(1200, 920)
-        
-        # 居中显示
-        from PyQt5.QtWidgets import QDesktopWidget
-        desktop = QDesktopWidget()
-        screen_rect = desktop.availableGeometry()
-        self.move((screen_rect.width() - self.width()) // 2,
-                 (screen_rect.height() - self.height()) // 2)
+        # 设置为最大化，铺满整个屏幕
+        self.setWindowState(self.windowState() | Qt.WindowMaximized)
         
     def _connect_signals(self):
         """连接所有组件的信号"""
