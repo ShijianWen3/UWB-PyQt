@@ -6,4 +6,4 @@
 
 ### 上位机GUI效果如下:
 
-![](C:\Users\lenovo\Desktop\qt\uwb-pyqt\asset\gui.png)
+![](https://github.com/ShijianWen3/UWB-PyQt/blob/main/asset/gui.png)
