@@ -3,3 +3,4 @@
 *.log
 *.ico
 /install
+/src/build
